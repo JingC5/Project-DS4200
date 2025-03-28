@@ -1,0 +1,10 @@
+Overall Introduction
+
+Deciding whether to pursue a Master of Business Administration (MBA) degree is a significant choice that can shape an individual’s career, financial future, and personal development. While an MBA can open doors to leadership roles, expand professional networks, and enhance business acumen, it also comes with substantial costs and time commitments. With ongoing debates about the return on investment, many individuals struggle to determine whether an MBA is the right path for them.
+
+Understanding the key factors that influence this decision—such as academic background, test scores, career goals, and market trends—can provide valuable insights. By analyzing past decisions and identifying key predictors, we can help individuals make more informed choices about whether an MBA aligns with their professional aspirations and financial circumstances. Additionally, these insights can benefit institutions and employers by refining admissions processes, improving recruitment strategies, and shaping career development initiatives.
+
+
+Introduction to the data
+
+We use a comprehensive Kaggle dataset containing exactly 10,000 records and 20 features. The key attributes include demographic information (e.g., age, gender), academic performance metrics (e.g., GPA, GMAT/GRE score), professional background (e.g., years of work experience, current job title), and motivational factors (e.g., desired post-MBA role, expected salary). This rich dataset enables us to explore the interplay of these factors and their impact on the decision to pursue an MBA.
