@@ -1,0 +1,5 @@
+Conclusion and additional work
+
+In summary, our analysis of the MBA decision dataset revealed meaningful patterns in how demographic details, academic performance, professional background, and motivational factors influence the choice to pursue an MBA. The findings provide insights that can inform both prospective students and educational institutions about key predictors of this major career decision.
+
+For future work, we plan to refine our predictive models and incorporate additional economic and qualitative factors to further deepen our understanding of the MBA decision-making process.
