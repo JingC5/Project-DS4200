@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.17.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-5c5009a3346f7063189ad5f9b295debb"}, "mark": {"type": "bar", "color": "blue"}, "encoding": {"x": {"axis": {"labelAngle": 45}, "field": "Current Job Title", "sort": "-y", "title": "Pre-MBA Job", "type": "nominal"}, "y": {"field": "mba_percentage", "scale": {"domain": [0, 100]}, "title": "% of People Who Pursued MBA", "type": "quantitative"}}, "height": 500, "title": "Percentage of People Pursuing MBA by Pre-MBA Job", "width": 800, "$schema": "https://vega.github.io/schema/vega-lite/v5.17.0.json", "datasets": {"data-5c5009a3346f7063189ad5f9b295debb": [{"Current Job Title": "Consultant", "total_count": 1989, "mba_yes_count": 1191, "mba_percentage": 59.879336349924586}, {"Current Job Title": "Engineer", "total_count": 2003, "mba_yes_count": 1196, "mba_percentage": 59.71043434847728}, {"Current Job Title": "Entrepreneur", "total_count": 2034, "mba_yes_count": 1214, "mba_percentage": 59.68534906588005}, {"Current Job Title": "Manager", "total_count": 1968, "mba_yes_count": 1152, "mba_percentage": 58.536585365853654}, {"Current Job Title": "Analyst", "total_count": 2006, "mba_yes_count": 1154, "mba_percentage": 57.527417746759724}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
