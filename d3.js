@@ -53,6 +53,7 @@ mba.then(function (data) {
         .attr('transform', 'translate(' + margin.left + ',0)')
         .call(d3.axisLeft().scale(yScale));
 
+
     const rollupFunction = function (groupData) {
         const values = groupData.map(d => d.GRE).sort(d3.ascending);
         const min = d3.min(values);
@@ -68,35 +69,76 @@ mba.then(function (data) {
     quantilesByGroups.forEach((quantiles, Decision) => {
         const x = xScale(Decision); // convert the platform to an x-coordinate
         const boxWidth = xScale.bandwidth(); // get the bandwidth for the width of the boxes
-    
+
+        // create tooltip
+        Tooltip = d3.select("#D3vis")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+
+        mouseover = function (d) {
+            Tooltip
+                .style("opacity", 1)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+                .style("stroke-width", 2)
+        }
+
+        mousemove = function (d) {
+            Tooltip
+                .html("Q1: " + quantiles.q1
+                    + "<br> Median: " + quantiles.med
+                    + "<br> Q3: " + quantiles.q3
+                )
+                .style("right", (d3.select(this).attr("cy") + 70) + "px")
+                .style("top", d3.select(this).attr("cx") + "px")
+        }
+
+        mouseleave = function (d) {
+            Tooltip
+                .style("opacity", 0)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+                .style("stroke-width", 1)
+        }
+
         // Draw vertical lines
         svg.append('line')
-          .attr('x1', x + boxWidth / 2)
-          .attr('y1', yScale(quantiles.min))
-          .attr('x2', x + boxWidth / 2)
-          .attr('y2', yScale(quantiles.max))
-          .attr('stroke', 'black')
-          .attr('width', 40)
-    
+            .attr('x1', x + boxWidth / 2)
+            .attr('y1', yScale(quantiles.min))
+            .attr('x2', x + boxWidth / 2)
+            .attr('y2', yScale(quantiles.max))
+            .attr('stroke', 'black')
+            .attr('width', 40)
+
         // Draw box
         svg.append("rect")
-          .attr('x', x)
-          .attr('y', yScale(quantiles.q3))
-          .attr('width', boxWidth)
-          .attr('height', (yScale(quantiles.q1) - yScale(quantiles.q3)))
-          .attr('stroke', 'black')
-          .attr('fill', "lightblue")
-    
+            .attr('x', x)
+            .attr('y', yScale(quantiles.q3))
+            .attr('width', boxWidth)
+            .attr('height', (yScale(quantiles.q1) - yScale(quantiles.q3)))
+            .attr('stroke', 'black')
+            .attr('fill', "lightblue")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+
         // Draw median line
         svg.append("line")
-          .attr('x1', x)
-          .attr('x2', x + boxWidth)
-          .attr('y1', yScale(quantiles.med))
-          .attr('y2', yScale(quantiles.med))
-          .attr('stroke', 'black')
-          .attr('width', 100)
-    
-      });
+            .attr('x1', x)
+            .attr('x2', x + boxWidth)
+            .attr('y1', yScale(quantiles.med))
+            .attr('y2', yScale(quantiles.med))
+            .attr('stroke', 'black')
+            .attr('width', 100)
+    });
 }).catch(function (error) {
     let svgerror = d3.select('#D3vis').append('p').text(error)
 })
