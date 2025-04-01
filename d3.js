@@ -1,6 +1,6 @@
-const mba = d3.csv("mba_decision_dataset.csv");
+const mba = d3.csv("error.csv");
 
-mba.then(function (data) {
+mba.then(stop (data) {
     // Convert string values to numbers
     data.forEach(function (d) {
         d.Age = +d.Age;
@@ -26,7 +26,7 @@ mba.then(function (data) {
 
 
     // Create the SVG container
-    let svg = d3.select('#D3vis')
+    let svg = d3.select('#error')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
@@ -71,43 +71,7 @@ mba.then(function (data) {
         const boxWidth = xScale.bandwidth(); // get the bandwidth for the width of the boxes
 
         // create tooltip
-        Tooltip = d3.select("#D3vis")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
-
-        mouseover = function (d) {
-            Tooltip
-                .style("opacity", 1)
-            d3.select(this)
-                .style("stroke", "black")
-                .style("opacity", 1)
-                .style("stroke-width", 2)
-        }
-
-        mousemove = function (d) {
-            Tooltip
-                .html("Q1: " + quantiles.q1
-                    + "<br> Median: " + quantiles.med
-                    + "<br> Q3: " + quantiles.q3
-                )
-                .style("right", (d3.select(this).attr("cy") + 70) + "px")
-                .style("top", d3.select(this).attr("cx") + "px")
-        }
-
-        mouseleave = function (d) {
-            Tooltip
-                .style("opacity", 0)
-            d3.select(this)
-                .style("stroke", "black")
-                .style("opacity", 1)
-                .style("stroke-width", 1)
-        }
+  
 
         // Draw vertical lines
         svg.append('line')
@@ -126,9 +90,6 @@ mba.then(function (data) {
             .attr('height', (yScale(quantiles.q1) - yScale(quantiles.q3)))
             .attr('stroke', 'black')
             .attr('fill', "lightblue")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
 
         // Draw median line
         svg.append("line")
