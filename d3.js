@@ -1,6 +1,6 @@
-const mba = d3.csv("error.csv");
+const mba = d3.csv("mba_decision_dataset.csv");
 
-mba.then(stop (data) {
+mba.then(function (data) {
     // Convert string values to numbers
     data.forEach(function (d) {
         d.Age = +d.Age;
@@ -26,7 +26,7 @@ mba.then(stop (data) {
 
 
     // Create the SVG container
-    let svg = d3.select('#error')
+    let svg = d3.select('#D3vis')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
@@ -70,8 +70,41 @@ mba.then(stop (data) {
         const x = xScale(Decision); // convert the platform to an x-coordinate
         const boxWidth = xScale.bandwidth(); // get the bandwidth for the width of the boxes
 
-        // create tooltip
-  
+        var Tooltip = d3.select("#D3vis")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+
+        // Three function that change the tooltip when user hover / move / leave a cell
+        var mouseover = function (d) {
+            Tooltip
+                .style("opacity", 1)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+                .style("stroke-width", 2);
+        };
+        var mousemove = function (d) {
+            Tooltip
+                .html("Q1: " + quantiles.q1
+                    + "<br>Median: " + quantiles.med
+                    + "<br>Q3: " + quantiles.q3
+                );
+        };
+        var mouseleave = function (d) {
+            Tooltip
+                .style("opacity", 0)
+            d3.select(this)
+                .style("stroke", "black")
+                .style("opacity", 1)
+                .style("stroke-width",1);
+        };
+
 
         // Draw vertical lines
         svg.append('line')
@@ -90,6 +123,9 @@ mba.then(stop (data) {
             .attr('height', (yScale(quantiles.q1) - yScale(quantiles.q3)))
             .attr('stroke', 'black')
             .attr('fill', "lightblue")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
 
         // Draw median line
         svg.append("line")
