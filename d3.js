@@ -79,14 +79,13 @@ mba.then(function (data) {
             .style("border-width", "2px")
             .style("border-radius", "5px")
             .style("padding", "5px")
+            .style("position", "absolute")
 
         // Three function that change the tooltip when user hover / move / leave a cell
         var mouseover = function (d) {
             Tooltip
-                .style("opacity", 1)
+                .transition().duration(250).style("opacity", 1)
             d3.select(this)
-                .style("stroke", "black")
-                .style("opacity", 1)
                 .style("stroke-width", 2);
         };
         var mousemove = function (d) {
@@ -94,15 +93,15 @@ mba.then(function (data) {
                 .html("Q1: " + quantiles.q1
                     + "<br>Median: " + quantiles.med
                     + "<br>Q3: " + quantiles.q3
-                );
+                )
+                .style("left", x - 17 + "px")
+                .style("top",  yScale(quantiles.q3) + "px")
         };
         var mouseleave = function (d) {
             Tooltip
-                .style("opacity", 0)
+                .transition().duration(250).style("opacity", 0)
             d3.select(this)
-                .style("stroke", "black")
-                .style("opacity", 1)
-                .style("stroke-width",1);
+                .transition().duration(250).style("stroke-width",1);
         };
 
 
