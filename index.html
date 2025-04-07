@@ -15,14 +15,14 @@
 
     <div class="intro">
         <h2>Overall Introduction</h2>
-        <p>
+        <p style="text-align:left;">
             Deciding whether to pursue a Master of Business Administration (MBA) degree is a significant
             choice that can shape an individual’s career, financial future, and personal development.
             While an MBA can open doors to leadership roles, expand professional networks, and enhance
             business acumen, it also comes with substantial costs and time commitments. With ongoing debates
             about the return on investment, many individuals struggle to determine whether an MBA is the right
             path for them.
-
+            <br><br>
             Understanding the key factors that influence this decision—such as academic background, test
             scores, career goals, and market trends—can provide valuable insights. By analyzing past
             decisions and identifying key predictors, we can help individuals make more informed choices
@@ -52,12 +52,12 @@
             to pursue an MBA by analyzing six key factors: Gender, Undergraduate Major, Current Job Title, MBA
             Funding Source, Desired Post-MBA Role, and Reason for MBA. Each panel displays a horizontal bar
             chart for one of these categorical features.
-
+            <br><br>
             Due to the overall imbalance in our dataset—where approximately 5,900 candidates decided to pursue an MBA
             compared to 4,100 who did not—we normalized the data by dividing each value by the total count in its
             corresponding MBA decision column. This approach allows us to compare the proportion of each feature
             across the two groups.
-
+            <br><br>
             The normalized charts reveal that the distributions between those who chose to pursue an MBA and
             those who did not are quite similar. This suggests that, when accounting for the imbalance in total
             counts, the data is evenly distributed across the different categorical variables.
@@ -67,15 +67,14 @@
     <div class="interactive">
         <h2>Interactive Scatterplot</h2>
         <iframe src="interactive_scatterplot.html" height="750" width="1100" title="GPA vs. GRE"></iframe>
-        <p>
+        <p style="text-align: left;">
             This interactive scatter plot examines the relationship between academic performance and standardized test
             scores among prospective MBA candidates. The horizontal axis represents the Undergraduate GPA
             (ranging from 2.0 to 4.0), while the vertical axis displays the GRE/GMAT Score (with a domain from 250 to
             800).
             Each data point corresponds to an individual candidate and is color-coded to indicate whether they decided
-            to
-            pursue an MBA.
-
+            to pursue an MBA.
+            <br><br>
             A key feature of this visualization is the dropdown filter for Undergraduate Major, which allows users to
             focus
             on specific fields of study. By selecting a particular major, one can compare their stats with people in a
@@ -89,6 +88,20 @@
     <div class="d3">
         <h2>D3 Visualization</h2>
         <div id="D3vis"></div>
+        <p style="text-align: left;">
+            This scatter plot shows the relationship betwen the years of work experience a person has and their age. The range 
+            of the work experience is 0 to 9 years and the range in age is 21 to 34. A subset of 100 data points were selected from the 
+            dataset to make the graph more readable and for the graph to render in a reasonable amount of time.
+            <br><br>
+            The graph does not appear to have an overall trend. From the sample population, there were people with 9 years of work experience
+            at age 33 who pursued an MBA, and one at age 32 who did not. This follows for people who are 34, where someone with 4 years of work
+            experience decided to puruse an MBA, while others with 3 or 6 years of experience did not. There are some places where people with the
+            same age and work experience made different decisions, like 8 years of experience at 26 or 3 years of experience at 32.
+            <br><br>
+            This population shows that people who are 33 or 34 typically do not go for an MBA. Out of 13 people who are 33 or 34 in the subpopulation, 
+            only 3 of them decided to puruse an MBA. There is converse point with people who have 6 years of work experience. Out of 12 people 
+            with this experience, 9 of them decided to pursue an MBA. 
+        </p>
     </div>
 
     <div class="gender">
@@ -104,9 +117,7 @@
         <p>TBD</p>
     </div>
 
-    <script src='https://d3js.org/d3.v7.min.js'></script>
-    <script src="d3.js"></script>
-
+    
     <div class="Conclusion">
         <h2>Conclusion and Additional Work</h2>
         <p>
@@ -117,12 +128,14 @@
             The findings provide insights that can inform both prospective students and educational institutions about
             key
             predictors of this major career decision.
-
+            <br>
             For future work, we plan to refine our predictive models and incorporate additional economic and qualitative
             factors
             to further deepen our understanding of the MBA decision-making process.
         </p>
     </div>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <script src="d3.js"></script>
 </body>
 
 </html>

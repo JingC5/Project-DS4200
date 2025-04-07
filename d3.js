@@ -14,8 +14,8 @@ mba.then(function (data) {
     });
 
     // Define the dimensions and margins for the SVG
-    let width = 600,
-        height = 400;
+    let width = 800,
+        height = 600;
 
     let margin = {
         top: 50,
@@ -34,13 +34,20 @@ mba.then(function (data) {
 
     // Add scales     
     let yScale = d3.scaleLinear()
-        .domain([200, 800])
+        .domain([20, 35])
         .range([height - margin.bottom, margin.top]);
 
-    let xScale = d3.scaleBand()
-        .domain([...new Set(data.map(d => d["Undergraduate Major"]))])
-        .range([margin.left, width - margin.right])
-        .padding(0.5);
+    let xScale = d3.scaleLinear()
+        .domain([0, 10])
+        .range([margin.left, width - margin.right]);
+
+    const x1 = d3.scaleBand()
+        .domain(["Yes", "No"])
+        .range([0, 1])
+
+    const color = d3.scaleOrdinal()
+        .domain(["Yes", "No"])
+        .range(["#1f77b4", "#ff7f0e"]);
 
     // Add x-axis label
     svg.append('g')
@@ -53,93 +60,100 @@ mba.then(function (data) {
         .attr('transform', 'translate(' + margin.left + ',0)')
         .call(d3.axisLeft().scale(yScale));
 
+    // Group container for bars
+    const dotGroups = svg.selectAll("dot")
+        .data(data)
+        .enter()
+        .append("g")
+        .attr("transform", d => `translate(${x1(d["Decided to Pursue MBA?"])},0)`);
 
-    const rollupFunction = function (groupData) {
-        const values = groupData.map(d => d.GRE).sort(d3.ascending);
-        const min = d3.min(values);
-        const q1 = d3.quantile(values, 0.25);
-        const med = d3.quantile(values, 0.5);
-        const q3 = d3.quantile(values, 0.75);
-        const max = d3.max(values);
-        return { min: min, q1: q1, med: med, q3: q3, max: max };
-    };
+    var tooltip = d3.select("#DSvis")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
 
-    const quantilesByGroups = d3.rollup(data, rollupFunction, d => d["Undergraduate Major"]);
+    var mouseover = function (d) {
+        tooltip
+            .style("opacity", 1)
+    }
 
-    quantilesByGroups.forEach((quantiles, Decision) => {
-        const x = xScale(Decision); // convert the platform to an x-coordinate
-        const boxWidth = xScale.bandwidth(); // get the bandwidth for the width of the boxes
+    var mousemove = function (d) {
+        tooltip
+            .html(d.Age)
+            .style("left", (event.pageX) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .style("top", (event.pageY) + "px")
+    }
 
-        var Tooltip = d3.select("#D3vis")
-            .append("div")
+    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+    var mouseleave = function (d) {
+        tooltip
+            .transition()
+            .duration(200)
             .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
-            .style("position", "absolute")
-
-        // Three function that change the tooltip when user hover / move / leave a cell
-        
-        var mouseover = function (d) {
-            Tooltip
-                .transition().duration(250).style("opacity", 1)
-            d3.select(this)
-                .style("stroke-width", 2);
-        };
-        
-        var mousemove = function (d) {
-            Tooltip
-                .style("left", 100 + "px")
-                .style("top", 100 + "px")
-                .html("Q1: " + quantiles.q1
-                    + "<br>Median: " + quantiles.med
-                    + "<br>Q3: " + quantiles.q3
-                )
-                
-        };
-        
-        var mouseleave = function (d) {
-            Tooltip
-                .transition().duration(250).style("opacity", 0)
-            d3.select(this)
-                .transition().duration(250).style("stroke-width",1);
-        };
-        
+    }
 
 
-        // Draw vertical lines
-        svg.append('line')
-            .attr('x1', x + boxWidth / 2)
-            .attr('y1', yScale(quantiles.min))
-            .attr('x2', x + boxWidth / 2)
-            .attr('y2', yScale(quantiles.max))
-            .attr('stroke', 'black')
-            .attr('width', 40)
+    // Add dots
+    dotGroups.append('g')
+        .selectAll("dot")
+        .data(data.filter(function (d, i) { return i < 100 })) // the .filter part is just to keep a few dots on the chart, not all of them
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return xScale(d.Years) })
+        .attr("cy", function (d) { return yScale(d.Age) })
+        .attr("r", 7)
+        .style("fill", color)
+        .style("opacity", 0.3)
+        .style("stroke", "white")
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
 
-        // Draw box
-        svg.append("rect")
-            .attr('x', x)
-            .attr('y', yScale(quantiles.q3))
-            .attr('width', boxWidth)
-            .attr('height', (yScale(quantiles.q1) - yScale(quantiles.q3)))
-            .attr('stroke', 'black')
-            .attr('fill', "lightblue")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave)
 
-        // Draw median line
-        svg.append("line")
-            .attr('x1', x)
-            .attr('x2', x + boxWidth)
-            .attr('y1', yScale(quantiles.med))
-            .attr('y2', yScale(quantiles.med))
-            .attr('stroke', 'black')
-            .attr('width', 100)
-    });
+    // Add the legend
+    const legend = svg.append("g")
+        .attr("transform", `translate(${width - 150}, ${margin.top})`);
+
+    const types = ["Yes", "No"];
+
+    types.forEach((type, i) => {
+
+        // Alread have the text information for the legend. 
+        // Now add a small square/rect bar next to the text with different color.
+        legend.append("text")
+            .attr("x", 80)
+            .attr("y", i * 20 + 12)
+            .text(type)
+            .attr("alignment-baseline", "middle");
+
+        legend.append('rect')
+            .attr('x', 65)
+            .attr('y', i * 20 + 6)
+            .attr('width', 10)
+            .attr('height', 10)
+            .style('fill', color(types[i]));
+    }
+    );
+
+    svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", (width / 2) + 50)
+        .attr("y", height - 6)
+        .text("Years of Experience");
+
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 20)
+        .attr("x", -170)
+        .attr("transform", "rotate(-90)")
+        .text("Age (Years)");
 }).catch(function (error) {
     let svgerror = d3.select('#D3vis').append('p').text(error)
 })
