@@ -82,27 +82,32 @@ mba.then(function (data) {
             .style("position", "absolute")
 
         // Three function that change the tooltip when user hover / move / leave a cell
+        
         var mouseover = function (d) {
             Tooltip
                 .transition().duration(250).style("opacity", 1)
             d3.select(this)
                 .style("stroke-width", 2);
         };
+        
         var mousemove = function (d) {
             Tooltip
+                .style("left", 100 + "px")
+                .style("top", 100 + "px")
                 .html("Q1: " + quantiles.q1
                     + "<br>Median: " + quantiles.med
                     + "<br>Q3: " + quantiles.q3
                 )
-                .style("left", x - 17 + "px")
-                .style("top",  yScale(quantiles.q3) + "px")
+                
         };
+        
         var mouseleave = function (d) {
             Tooltip
                 .transition().duration(250).style("opacity", 0)
             d3.select(this)
                 .transition().duration(250).style("stroke-width",1);
         };
+        
 
 
         // Draw vertical lines
