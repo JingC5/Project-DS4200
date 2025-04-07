@@ -1,16 +1,9 @@
-const mba = d3.csv("mba_decision_dataset.csv");
+const mba = d3.csv("mba_bar_avg.csv");
 
 mba.then(function (data) {
     // Convert string values to numbers
     data.forEach(function (d) {
-        d.Age = +d.Age;
         d.Years = +d["Years of Work Experience"];
-        d.ActualSalary = +d["Annual Salary (Before MBA)"];
-        d.GRE = +d["GRE/GMAT Score"];
-        d.UndergradRanking = +d["Undergrad University Ranking"];
-        d.Entrepreneurial = +d["Entrepreneurial Interest"];
-        d.Networking = +d["Networking Importance"];
-        d.ExpectedSalary = +d["Expected Post-MBA Salary"];
     });
 
     // Define the dimensions and margins for the SVG
@@ -34,16 +27,16 @@ mba.then(function (data) {
 
     // Add scales     
     let yScale = d3.scaleLinear()
-        .domain([20, 35])
+        .domain([0, 10])
         .range([height - margin.bottom, margin.top]);
 
-    let xScale = d3.scaleLinear()
-        .domain([0, 10])
+    let xScale = d3.scaleBand()
+        .domain([...new Set(data.map(d => d["Desired Post-MBA Role"]))])
         .range([margin.left, width - margin.right]);
 
     const x1 = d3.scaleBand()
         .domain(["Yes", "No"])
-        .range([0, 1])
+        .range([0, xScale.bandwidth()])
 
     const color = d3.scaleOrdinal()
         .domain(["Yes", "No"])
@@ -61,13 +54,13 @@ mba.then(function (data) {
         .call(d3.axisLeft().scale(yScale));
 
     // Group container for bars
-    const dotGroups = svg.selectAll("dot")
+    const barGroups = svg.selectAll("bar")
         .data(data)
         .enter()
         .append("g")
         .attr("transform", d => `translate(${x1(d["Decided to Pursue MBA?"])},0)`);
 
-    var tooltip = d3.select("#DSvis")
+    var tooltip = d3.select("#D3vis")
         .append("div")
         .style("opacity", 0)
         .attr("class", "tooltip")
@@ -84,7 +77,7 @@ mba.then(function (data) {
 
     var mousemove = function (d) {
         tooltip
-            .html(d.Age)
+            .html(d.Years)
             .style("left", (event.pageX) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
             .style("top", (event.pageY) + "px")
     }
@@ -97,19 +90,14 @@ mba.then(function (data) {
             .style("opacity", 0)
     }
 
-
-    // Add dots
-    dotGroups.append('g')
-        .selectAll("dot")
-        .data(data.filter(function (d, i) { return i < 50 })) // the .filter part is just to keep a few dots on the chart, not all of them
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) { return xScale(d.Years) })
-        .attr("cy", function (d) { return yScale(d.Age) })
-        .attr("r", 7)
-        .style("fill", color)
-        .style("opacity", 0.3)
-        .style("stroke", "white")
+    // Draw bars
+    barGroups.append("rect")
+        .attr('x', d => xScale(d["Desired Post-MBA Role"]))
+        .attr('y', d => yScale(d.Years))
+        .attr('width', x1.bandwidth()/2)
+        .attr('height', d => (height - margin.bottom - yScale(d.Years)))
+        .attr('fill', color)
+        .style('stroke', 'black')
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -145,7 +133,7 @@ mba.then(function (data) {
         .attr("text-anchor", "end")
         .attr("x", (width / 2) + 50)
         .attr("y", height - 6)
-        .text("Years of Experience");
+        .text("Desire Post-MBA Role");
 
     svg.append("text")
         .attr("class", "y label")
@@ -153,7 +141,7 @@ mba.then(function (data) {
         .attr("y", 20)
         .attr("x", -170)
         .attr("transform", "rotate(-90)")
-        .text("Age (Years)");
+        .text("Years of Work Experience");
 }).catch(function (error) {
     let svgerror = d3.select('#D3vis').append('p').text(error)
 })
