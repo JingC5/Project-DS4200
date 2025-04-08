@@ -94,7 +94,7 @@ mba.then(function (data) {
     barGroups.append("rect")
         .attr('x', d => xScale(d["Desired Post-MBA Role"]))
         .attr('y', d => yScale(d.Years))
-        .attr('width', x1.bandwidth()/2)
+        .attr('width', x1.bandwidth())
         .attr('height', d => (height - margin.bottom - yScale(d.Years)))
         .attr('fill', color)
         .style('stroke', 'black')
