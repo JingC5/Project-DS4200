@@ -35,12 +35,12 @@ mba.then(function (data) {
         .range([margin.left, width - margin.right]);
 
     const x1 = d3.scaleBand()
-        .domain(["Yes", "No"])
+        .domain(["No", "Yes"])
         .range([0, xScale.bandwidth()])
 
     const color = d3.scaleOrdinal()
-        .domain(["Yes", "No"])
-        .range(["#1f77b4", "#ff7f0e"]);
+        .domain(["No", "Yes"])
+        .range(["#ff0000", "#0000ff"]);
 
     // Add x-axis label
     svg.append('g')
@@ -81,8 +81,10 @@ mba.then(function (data) {
     }
 
     var mousemove = function (d) {
+        place = Math.floor(((event.pageX / 90) - 3.8) * (9/7))
+        rounded = Math.round(data[place].Years * 100) / 100
         tooltip
-            .html("The average age is: ")
+            .html("The average age is: " + rounded)
             .style("left", (event.pageX) + 10 + "px") 
             .style("top", (event.pageY) + "px")
     }
