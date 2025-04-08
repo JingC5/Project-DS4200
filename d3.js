@@ -82,15 +82,13 @@ mba.then(function (data) {
 
     var mousemove = function (d) {
         tooltip
-            .html("The average age is: " + d)
+            .html("The average age is: ")
             .style("left", (event.pageX) + 10 + "px") 
             .style("top", (event.pageY) + "px")
     }
 
     var mouseleave = function (d) {
         tooltip
-            .transition()
-            .duration(200)
             .style("opacity", 0)
         d3.select(this)
             .style("stroke", "black")
@@ -99,8 +97,8 @@ mba.then(function (data) {
     }
 
     // Draw bars
-    barGroups.append("rect")
-        .attr('x', d => xScale(d["Desired Post-MBA Role"]))
+    barGroups.select("rect").data(data).enter().append("rect")
+        .attr('x', d => xScale(d["Desired Post-MBA Role"]) + x1(d["Decided to Pursue MBA?"]))
         .attr('y', d => yScale(d.Years))
         .attr('width', x1.bandwidth())
         .attr('height', d => (height - margin.bottom - yScale(d.Years)))
