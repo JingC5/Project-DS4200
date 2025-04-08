@@ -84,7 +84,7 @@ mba.then(function (data) {
         place = Math.floor(((event.pageX / 90) - 3.8) * (9/7))
         rounded = Math.round(data[place].Years * 100) / 100
         tooltip
-            .html("The average age is: " + rounded)
+            .html("The average work experience is: " + rounded)
             .style("left", (event.pageX) + 10 + "px") 
             .style("top", (event.pageY) + "px")
     }
