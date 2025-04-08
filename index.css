@@ -45,3 +45,9 @@ body iframe {
     text-align: center;
     padding-top: 10px;
 }
+
+.d3Vis {
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+}

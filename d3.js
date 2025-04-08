@@ -8,7 +8,7 @@ mba.then(function (data) {
 
     // Define the dimensions and margins for the SVG
     let width = 800,
-        height = 600;
+        height = 400;
 
     let margin = {
         top: 50,
@@ -19,7 +19,7 @@ mba.then(function (data) {
 
 
     // Create the SVG container
-    let svg = d3.select('#D3vis')
+    let svg = d3.select('#d3vis')
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
@@ -27,7 +27,7 @@ mba.then(function (data) {
 
     // Add scales     
     let yScale = d3.scaleLinear()
-        .domain([0, 10])
+        .domain([4, 5])
         .range([height - margin.bottom, margin.top]);
 
     let xScale = d3.scaleBand()
@@ -60,7 +60,7 @@ mba.then(function (data) {
         .append("g")
         .attr("transform", d => `translate(${x1(d["Decided to Pursue MBA?"])},0)`);
 
-    var tooltip = d3.select("#D3vis")
+    var tooltip = d3.select("#d3vis")
         .append("div")
         .style("opacity", 0)
         .attr("class", "tooltip")
@@ -69,25 +69,33 @@ mba.then(function (data) {
         .style("border-width", "1px")
         .style("border-radius", "5px")
         .style("padding", "10px")
+        .style("position", "absolute")
 
     var mouseover = function (d) {
         tooltip
             .style("opacity", 1)
+        d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 1)
+            .style("stroke-width", 2);
     }
 
     var mousemove = function (d) {
         tooltip
-            .html(d.Years)
-            .style("left", (event.pageX) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+            .html("The average age is: " + d)
+            .style("left", (event.pageX) + 10 + "px") 
             .style("top", (event.pageY) + "px")
     }
 
-    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
     var mouseleave = function (d) {
         tooltip
             .transition()
             .duration(200)
             .style("opacity", 0)
+        d3.select(this)
+            .style("stroke", "black")
+            .style("opacity", 0.8)
+            .style("stroke-width", 1);
     }
 
     // Draw bars
@@ -98,6 +106,7 @@ mba.then(function (data) {
         .attr('height', d => (height - margin.bottom - yScale(d.Years)))
         .attr('fill', color)
         .style('stroke', 'black')
+        .style('opacity', 0.8)
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -131,17 +140,17 @@ mba.then(function (data) {
     svg.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", (width / 2) + 50)
+        .attr("x", (width / 2) + 95)
         .attr("y", height - 6)
-        .text("Desire Post-MBA Role");
+        .text("Desired Post-MBA Role");
 
     svg.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("y", 20)
-        .attr("x", -170)
+        .attr("x", -120)
         .attr("transform", "rotate(-90)")
         .text("Years of Work Experience");
 }).catch(function (error) {
-    let svgerror = d3.select('#D3vis').append('p').text(error)
+    let svgerror = d3.select('#d3vis').append('p').text(error)
 })
