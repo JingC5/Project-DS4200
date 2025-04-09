@@ -150,7 +150,7 @@ mba.then(function (data) {
         .attr("y", 20)
         .attr("x", -120)
         .attr("transform", "rotate(-90)")
-        .text("Years of Work Experience");
+        .text("Years of Work Experience");    
 }).catch(function (error) {
     let svgerror = d3.select('#d3vis').append('p').text(error)
 })
