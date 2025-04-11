@@ -7,8 +7,8 @@ mba.then(function (data) {
     });
 
     // Define the dimensions and margins for the SVG
-    let width = 800,
-        height = 400;
+    let width = 1000,
+        height = 800;
 
     let margin = {
         top: 50,
@@ -32,11 +32,13 @@ mba.then(function (data) {
 
     let xScale = d3.scaleBand()
         .domain([...new Set(data.map(d => d["Desired Post-MBA Role"]))])
-        .range([margin.left, width - margin.right]);
+        .range([margin.left, width - margin.right])
+        .padding(0.05);
 
     const x1 = d3.scaleBand()
         .domain(["No", "Yes"])
         .range([0, xScale.bandwidth()])
+        .padding(0.01)
 
     const color = d3.scaleOrdinal()
         .domain(["No", "Yes"])
@@ -58,7 +60,7 @@ mba.then(function (data) {
         .data(data)
         .enter()
         .append("g")
-        .attr("transform", d => `translate(${x1(d["Decided to Pursue MBA?"])},0)`);
+        .attr("transform", d => `translate(${x1(d["Decided to Pursue MBA?"])},0)`)
 
     var tooltip = d3.select("#d3vis")
         .append("div")
@@ -72,7 +74,9 @@ mba.then(function (data) {
         .style("position", "absolute")
 
     var mouseover = function (d) {
+        group = Math.round(100 * d3.select(this).data()[0]["Years"]) / 100
         tooltip
+            .html(group)
             .style("opacity", 1)
         d3.select(this)
             .style("stroke", "black")
@@ -81,10 +85,7 @@ mba.then(function (data) {
     }
 
     var mousemove = function (d) {
-        place = Math.floor(((event.pageX / 90) - 3.8) * (9/7))
-        rounded = Math.round(data[place].Years * 100) / 100
         tooltip
-            .html("The average work experience is: " + rounded)
             .style("left", (event.pageX) + 10 + "px") 
             .style("top", (event.pageY) + "px")
     }
@@ -148,7 +149,7 @@ mba.then(function (data) {
         .attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("y", 20)
-        .attr("x", -120)
+        .attr("x", -200)
         .attr("transform", "rotate(-90)")
         .text("Years of Work Experience");    
 }).catch(function (error) {

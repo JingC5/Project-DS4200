@@ -17,10 +17,6 @@ body h2 {
     font-size: 30px;
 }
 
-body p {
-    font-size: 22px;
-}
-
 body iframe {
     text-align: center;
     border: 2px solid darkgray;
@@ -28,29 +24,24 @@ body iframe {
 
 .intro {
     text-align: center;
-    font-size: 22px;
 }
 
 .job {
     text-align: center;
     padding-top: 10px;
-    font-size: 22px;
 }
 
 .interactive {
     text-align: center;
-    font-size: 22px;
 }
 
 .d3 {
     text-align: center;
-    font-size: 22px;
 }
 
 .gender {
     text-align: center;
     padding-top: 10px;
-    font-size: 22px;
 }
 
 .d3Vis {
