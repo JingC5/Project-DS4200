@@ -3,21 +3,22 @@ body {
     margin-right: 5%;
     margin-bottom: 5%;
     background-color: #f5f5f5;
+    font-size: 22px;
 }
 
 body header {
     padding: 15px;
     text-align: center;
-    font-size: 30px;
+    font-size: 36px;
 }
 
 body h2 {
     text-align: center;
-    font-size: 25px;
+    font-size: 30px;
 }
 
 body p {
-    font-size: 18px;
+    font-size: 22px;
 }
 
 body iframe {
@@ -27,23 +28,29 @@ body iframe {
 
 .intro {
     text-align: center;
+    font-size: 22px;
 }
 
 .job {
     text-align: center;
-    padding-top: 10px
+    padding-top: 10px;
+    font-size: 22px;
 }
+
 .interactive {
     text-align: center;
+    font-size: 22px;
 }
 
 .d3 {
     text-align: center;
+    font-size: 22px;
 }
 
 .gender {
     text-align: center;
     padding-top: 10px;
+    font-size: 22px;
 }
 
 .d3Vis {
